@@ -11,7 +11,7 @@
   --line:rgba(40,91,105,.22);--shadow:0 18px 55px rgba(28,91,100,.15);
 }
 *{box-sizing:border-box}
-html,body{margin:0;width:100%;height:100%;font-family:system-ui,-apple-system,"Noto Sans JP","Yu Gothic",sans-serif;color:var(--ink);overflow:hidden}
+html,body{margin:0;width:100%;min-height:100%;font-family:system-ui,-apple-system,"Noto Sans JP","Yu Gothic",sans-serif;color:var(--ink);overflow-x:hidden}
 body{
   background:
     radial-gradient(circle at 12% 18%,rgba(255,255,255,.9) 0 2px,transparent 3px),
@@ -32,10 +32,10 @@ h1 span{color:var(--mint)}
 .subtitle{margin:9px 0 0;color:#269b9b;font-weight:800;letter-spacing:.22em;font-size:clamp(10px,1.3vw,14px)}
 .counter{font-size:13px;font-weight:900;color:#168f8c;white-space:nowrap}
 .profile{position:relative;z-index:1;flex:1;min-height:0;display:grid;grid-template-columns:minmax(260px, .95fr) minmax(300px,1.05fr);gap:clamp(18px,3vw,38px);padding:clamp(10px,1.8vh,20px) clamp(20px,4vw,48px) 16px;overflow:hidden}
-.visual{position:relative;min-height:0;height:100%;border-radius:18px;overflow:hidden;background:linear-gradient(145deg,#9de6dc,#d5f9f2 55%,#a9dff3);display:flex;align-items:center;justify-content:center}
+.visual{position:relative;min-height:0;height:100%;border-radius:18px;overflow:hidden;background:linear-gradient(145deg,#f4f6fb,#ffffff 55%,#edf2fa);display:flex;align-items:center;justify-content:center}
 .visual:before,.visual:after{content:"";position:absolute;border:1px solid rgba(255,255,255,.55);border-radius:50%;width:310px;height:310px}
 .visual:after{width:390px;height:390px}
-.avatar{position:relative;z-index:1;width:100%;height:100%;max-height:520px;object-fit:contain;mix-blend-mode:multiply}
+.avatar{position:relative;z-index:1;width:100%;height:100%;max-height:520px;object-fit:contain;mix-blend-mode:normal}
 .avatar-fallback{position:relative;z-index:1;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;color:#287f82;font-weight:800}
 .avatar-fallback .emoji{font-size:clamp(76px,13vw,150px)}
 .visual.has-error .avatar{display:none}
@@ -72,18 +72,44 @@ h1 span{color:var(--mint)}
  .controls{padding-bottom:10px}
  .swipe-hint{padding-bottom:10px}
 }
+@media(max-width:380px){.header{padding-left:14px;padding-right:14px}h1{font-size:clamp(25px,7vw,32px)}.profile{padding-left:12px;padding-right:12px}.controls{gap:12px}.nav{width:40px;height:40px}}
 @media(prefers-reduced-motion:no-preference){.profile{animation:fadein .28s ease}@keyframes fadein{from{opacity:.55;transform:translateX(12px)}to{opacity:1;transform:none}}}
+
+/* Birthday welcome popup */
+.welcome-overlay{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:22px;background:rgba(28,42,60,.48);backdrop-filter:blur(7px);opacity:1;transition:opacity .25s ease}
+.welcome-overlay.is-hidden{opacity:0;pointer-events:none}
+.welcome-card{width:min(440px,100%);padding:34px 24px 26px;text-align:center;border:3px solid #fff;border-radius:28px;background:linear-gradient(145deg,#fff 0%,#fff9e9 100%);box-shadow:0 24px 80px rgba(20,35,55,.28);transform:translateY(0) scale(1);transition:transform .25s ease}
+.welcome-overlay.is-hidden .welcome-card{transform:translateY(12px) scale(.96)}
+.welcome-icon{font-size:46px;line-height:1.2;margin-bottom:12px}
+.welcome-title{margin:0;color:#26344d;font-size:clamp(27px,7vw,38px);font-weight:1000;line-height:1.25}
+.welcome-title span{display:block;color:#20bfae;font-size:.82em;margin-top:5px}
+.welcome-copy{margin:14px 0 22px;color:#526174;font-size:14px;font-weight:750;line-height:1.7}
+.welcome-close{border:0;border-radius:999px;padding:13px 30px;background:#20bfae;color:#fff;font-size:15px;font-weight:900;cursor:pointer;box-shadow:0 6px 16px rgba(32,191,174,.25)}
+.welcome-close:focus-visible{outline:3px solid #26344d;outline-offset:3px}
+@media(max-width:700px){.welcome-card{padding:30px 20px 24px}.welcome-icon{font-size:42px}}
+@media(prefers-reduced-motion:reduce){.welcome-overlay,.welcome-card{transition:none}}
+
 </style>
 </head>
 <body>
+
+<div class="welcome-overlay" id="welcome" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle">
+  <div class="welcome-card">
+    <div class="welcome-icon" aria-hidden="true">🥦🍼🎂</div>
+    <h2 class="welcome-title" id="welcomeTitle">パブロ🥦🍼<span>HAPPY BIRTHDAY!</span></h2>
+    <p class="welcome-copy">みんなからのお祝いメッセージを集めたよ！<br>素敵な誕生日になりますように。</p>
+    <button class="welcome-close" id="welcomeClose" type="button">メッセージを見る！</button>
+  </div>
+</div>
+
 <main class="page">
   <div class="topline">
     <div class="eyebrow">SPECIAL BIRTHDAY MESSAGE</div>
-    <div class="brand">🥦 PABLO 🍼</div>
+    <div class="brand">パブロ🥦🍼</div>
   </div>
   <section class="board" aria-label="誕生日寄せ書き">
     <header class="header">
-      <div><h1><span>HAPPY</span> BIRTHDAY!</h1><p class="subtitle">MESSAGE COLLECTION FOR PABLO</p></div>
+      <div><h1><span>HAPPY</span> BIRTHDAY!</h1><p class="subtitle">MESSAGE COLLECTION FOR パブロ</p></div>
       <div class="counter" id="counter">01 / 09</div>
     </header>
     <article class="profile" id="profile" aria-live="polite">
@@ -107,7 +133,7 @@ h1 span{color:var(--mint)}
     </nav>
     <div class="swipe-hint">← SWIPE / DRAG TO CHANGE →</div>
   </section>
-  <div class="footer">HAPPY BIRTHDAY PABLO 🥦🍼 · WITH LOVE</div>
+  <div class="footer">HAPPY BIRTHDAY パブロ🥦🍼 · WITH LOVE</div>
 </main>
 <script>
 const messages = [{"name": "弱い犬", "message": "生きろ。そなたは美しい。", "image": "https://drive.google.com/thumbnail?id=1hcyjvVC_fZqSEVB95dqpUmbFtNf9xhEk&sz=w1200", "timestamp": "2026-11-07 06:29:36.387000"}, {"name": "正義", "message": "誕生日おめでとうございます🎉!(´▽｀)🎉\n良い一年になりますように(ㅅ´ ˘ `)\nいっぱいブロッコリー食べてもっと大きくなってください！", "image": "https://drive.google.com/thumbnail?id=1osjhUffhQ8a61FSBfhREs4Ipzys0ldja&sz=w1200", "timestamp": "2026-11-07 07:29:19.776000"}, {"name": "しるみぃ", "message": "ブロさん誕生日おめでとござます！めっちゃ尊敬してます！これからもいろんな人に🥦配ってください！そして仲良くしてください！おめでとうございます！", "image": "https://drive.google.com/thumbnail?id=1_cBdL2QoLCmZLincfkxcPJlWgjiuLweq&sz=w1200", "timestamp": "2026-11-07 09:40:55.371000"}, {"name": "結愛 みぃ🍵🕊️", "message": "お誕生日おめでとう🎉\n生まれてきてくれて\n出会ってくれてありがとう🫶\n来年もお祝いさせてね！愛してるよっ😘", "image": "https://drive.google.com/thumbnail?id=1nXzlfCMLN5vIdyawIPC0DTWkzrzjL-yI&sz=w1200", "timestamp": "2026-11-07 13:10:47.225000"}, {"name": "どーなってんだ！", "message": "ハッピーバースデー‼️パブロ記者にはこれからも沢山の記事で沢山の人を幸せにして欲しいと思います👏🏻✨👏🏻✨👏🏻✨", "image": "https://drive.google.com/thumbnail?id=1pyjLRsO-ukYlQkfzMEis1jPwoiST_ubv&sz=w1200", "timestamp": "2026-11-08 01:26:18.479000"}, {"name": "u", "message": "ブロさん誕生日おめでとう🎉いつも頼りにさせてもらってます！これからも楽しいこといっぱい目論んで行こうね💪いい1年になること祈ってるよぉ⤴︎︎︎", "image": "https://drive.google.com/thumbnail?id=1m5mPnbpFEMwaZ0lILiG4NzeGmp3KszGz&sz=w1200", "timestamp": "2026-11-08 05:26:11.818000"}, {"name": "柚乃ちゃん", "message": "ブロさん！お誕生日おめでと🎉\n今回は生誕(収穫)祭ということで🥦になってみたよ\nいつも楽しい時間をありがとうね！ブロさんにもたくさん元気貰ってるっ！\nこれからもよろしくね！ウホホン(  ◜ω◝🫶", "image": "https://drive.google.com/thumbnail?id=1sU45SpZT6DLIwVbXlYO7N5tbyg6g27Yx&sz=w1200", "timestamp": "2026-11-08 14:08:34.074000"}, {"name": "ふるれむ", "message": "誕生日おめでとー！\n良い一日を過ごしてね！\nパブロさんが良い一年になる事、ｲﾉｯﾃﾙﾖ!", "image": "https://drive.google.com/thumbnail?id=1OV1WNat57uJG22onr37gGnjLH6vpnLEA&sz=w1200", "timestamp": "2026-11-08 14:13:11.575000"}, {"name": "アヘ顔ダブルピース", "message": "ブロさん、誕生日おめでとう！！🎉🎂\n\nブロさんとの出会いって僕にとってすごい印象に残ってます✨️\n\nあのときブロさんがいてくれたから、今の大切な繋がりや時間があるんだと思う。\n\nブロさんの何気ない一言がこんなにも幸せいっぱいになったよありがとう🫶\n\nいつもふざけたり笑ったりしてるけど、こういう縁を作ってくれたブロさんには感謝してます！\n\nこれからも変わらず仲良くしていこう！\n\nブロさんにとって幸せな一年になりますように！！祈ってくれ！！！\n誕生日おめでとう！！", "image": "https://drive.google.com/thumbnail?id=1kTfJA0SQcdQ9Q91gzuFW6A2ZJdRIblzl&sz=w1200", "timestamp": "2026-11-08 17:25:23.398000"}];
@@ -121,8 +147,21 @@ function render(){
   $("counter").textContent = String(current+1).padStart(2,"0")+" / "+String(messages.length).padStart(2,"0");
   const visual = $("visual"), avatar = $("avatar");
   visual.classList.remove("has-error");
+  avatar.dataset.fallbackTried = "false";
   avatar.onload = () => visual.classList.remove("has-error");
-  avatar.onerror = () => visual.classList.add("has-error");
+  avatar.onerror = () => {
+    // Google Driveのthumbnail URLが失敗した場合、通常の表示URLで再試行する
+    if (avatar.dataset.fallbackTried !== "true" && item.image) {
+      const fileId = item.image.match(/[?&]id=([^&]+)/)?.[1];
+      if (fileId) {
+        avatar.dataset.fallbackTried = "true";
+        avatar.src = "https://drive.google.com/uc?export=view&id=" + fileId;
+        return;
+      }
+    }
+    visual.classList.add("has-error");
+  };
+  avatar.referrerPolicy = "no-referrer";
   avatar.src = item.image || "";
   $("prev").disabled = current === 0;
   $("next").disabled = current === messages.length-1;
@@ -142,6 +181,16 @@ $("profile").addEventListener("pointerdown",e=>{if(e.pointerType==="mouse")point
 $("profile").addEventListener("pointerup",e=>{if(pointerStart!==null){const dx=e.clientX-pointerStart;if(Math.abs(dx)>65)go(current+(dx<0?1:-1));pointerStart=null;}});
 document.addEventListener("keydown",e=>{if(e.key==="ArrowRight")go(current+1);if(e.key==="ArrowLeft")go(current-1);});
 render();
+
+const welcome = $("welcome");
+function closeWelcome(){
+  welcome.classList.add("is-hidden");
+  window.setTimeout(()=>welcome.remove(),260);
+}
+$("welcomeClose").addEventListener("click",closeWelcome);
+welcome.addEventListener("click",e=>{if(e.target===welcome)closeWelcome();});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&welcome.isConnected)closeWelcome();});
+
 </script>
 </body>
 </html>
